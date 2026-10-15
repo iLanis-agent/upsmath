@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UPS Math - the battery backup honesty tool</title>
+<link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css">
+<style>
+  :root { --accent: #6a5a2a; }
+  h1 { color: var(--accent); margin-bottom: 0.2em; }
+  .tag { color: var(--accent); font-style: italic; }
+  .card { border: 1px solid #ddd; border-left: 4px solid var(--accent); padding: 1em 1.2em; margin: 1.2em 0; border-radius: 4px; }
+  .foot { margin-top: 2.5em; font-size: 0.85em; color: #777; }
+  .go { display: inline-block; margin-top: 0.8em; padding: 0.55em 1.1em; background: var(--accent); color: #fff; border-radius: 4px; text-decoration: none; }
+</style>
+</head>
+<body>
+<h1>UPS Math</h1>
+<p class="tag">The 1500 on the box is volt-amps, not watts. The ten minutes was measured at half load with a battery that had never seen an outage. Your draw and your battery's age write the real number.</p>
+<a class="go" href="app.html">Open the app &rarr;</a>
+<div class="card">
+  <h3>The watt truth</h3>
+  <p>Volt-amps are the marketing number; watts are what your computer actually draws. At the usual 0.6 power factor, the 1500 VA box honestly holds about 900 watts.</p>
+</div>
+<div class="card">
+  <h3>The runtime truth</h3>
+  <p>The spec sheet's minutes were measured at half load. Runtime falls with your actual draw - and past half load the curve bends down faster than the inverse math hopes.</p>
+</div>
+<div class="card">
+  <h3>The age truth</h3>
+  <p>A sealed lead battery fades about 12% a year on the shelf, floor at 40%. The five-year-old unit in the corner is a shorter bridge than the sticker promised.</p>
+</div>
+<div class="card">
+  <h3>What it never does</h3>
+  <p>It never promises the outage you planned for, never calls an estimate a guarantee, and never forgets the norms are labeled - the next thunderstorm keeps the honest ledger.</p>
+</div>
+<p class="foot">UPS Math is open source - the engine is small enough to read, and the math is plain enough to argue with.</p>
+</body>
+</html>
