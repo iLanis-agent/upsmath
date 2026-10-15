@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UPS Math - app</title>
+<link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css">
+<style>
+  :root { --accent: #6a5a2a; }
+  h1 { color: var(--accent); margin-bottom: 0.2em; }
+  .tag { color: var(--accent); font-style: italic; }
+  .card { border: 1px solid #ddd; border-left: 4px solid var(--accent); padding: 1em 1.2em; margin: 1.2em 0; border-radius: 4px; }
+  .big { font-size: 1.2rem; font-weight: 700; color: var(--accent); margin-top: 0.8em; }
+  .err { color: #b00; font-weight: 700; }
+  label { display: block; margin-top: 0.6em; font-size: 0.9em; }
+  input, select { max-width: 12em; }
+  .foot { margin-top: 2.5em; font-size: 0.85em; color: #777; }
+</style>
+</head>
+<body>
+<h1>UPS Math</h1>
+<p class="tag">Watt truth, runtime truth and age truth - labeled norms, honest arithmetic.</p>
+
+<div class="card">
+  <h3>The watt truth</h3>
+  <label for="w-va">Sticker rating (VA)</label>
+  <input id="w-va" type="number" step="any" value="1500">
+  <p class="big" id="w-out"></p>
+</div>
+
+<div class="card">
+  <h3>The runtime truth</h3>
+  <label for="r-halfw">Spec half-load watts</label>
+  <input id="r-halfw" type="number" step="any" value="450">
+  <label for="r-halfm">Spec half-load minutes</label>
+  <input id="r-halfm" type="number" step="any" value="10">
+  <label for="r-load">Your actual draw (watts)</label>
+  <input id="r-load" type="number" step="any" value="600">
+  <p class="big" id="r-out"></p>
+</div>
+
+<div class="card">
+  <h3>The age truth</h3>
+  <label for="a-min">Minutes when new</label>
+  <input id="a-min" type="number" step="any" value="7.5">
+  <label for="a-age">Battery age (years)</label>
+  <input id="a-age" type="number" step="any" value="3">
+  <p class="big" id="a-out"></p>
+</div>
+
+<p class="foot">The 0.6 power factor, the inverse-minute model and the 12% annual fade are labeled norms - the arithmetic is honest, and the outage keeps the honest ledger.</p>
+
+<script src="engine.js"></script>
+<script>
+function g(id){ return document.getElementById(id); }
+function v(id){ var n = parseFloat(g(id).value); return isNaN(n) ? NaN : n; }
+function show(id, s, bad){ var el = g(id); el.textContent = s; el.className = bad ? "err big" : "big"; }
+
+function runWatt(){
+  var args = [v("w-va")];
+  var r = UpsMath.wattPlan.apply(null, args);
+  if (r.error) return show("w-out", r.error, true);
+  show("w-out", UpsMath.renderWatt.apply(null, [r].concat(args)), false);
+}
+function runRuntime(){
+  var args = [v("r-halfw"), v("r-halfm"), v("r-load")];
+  var r = UpsMath.runtimePlan.apply(null, args);
+  if (r.error) return show("r-out", r.error, true);
+  show("r-out", UpsMath.renderRuntime.apply(null, [r].concat(args)), false);
+}
+function runAge(){
+  var args = [v("a-min"), v("a-age")];
+  var r = UpsMath.agePlan.apply(null, args);
+  if (r.error) return show("a-out", r.error, true);
+  show("a-out", UpsMath.renderAge.apply(null, [r].concat(args)), false);
+}
+["w-va"].forEach(function(id){ g(id).addEventListener("input", runWatt); });
+["r-halfw", "r-halfm", "r-load"].forEach(function(id){ g(id).addEventListener("input", runRuntime); });
+["a-min", "a-age"].forEach(function(id){ g(id).addEventListener("input", runAge); });
+runWatt(); runRuntime(); runAge();
+</script>
+</body>
+</html>
